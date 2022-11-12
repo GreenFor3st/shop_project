@@ -49,8 +49,23 @@
 					</ul>
 					<ul class="header-links pull-right">
 						<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-						<li><a href="{% url 'register' %}"><i class="fa fa-user-o"></i> Register</a></li>
-						<li><a href="{% url 'login' %}"><i class="fa fa-user-o"></i> Login</a></li>
+						<li><a href="{% url 'register' %}"><i class="fa fa-user-o"></i>
+							{% if user.is_authenticated %}
+								{{ user.username }}
+							{% else %}
+								Register
+							{% endif %}
+						</a></li>
+						<li><a href="{% url 'login' %}"><i class="fa fa-user-o"></i>
+							{% if user.is_authenticated %}
+								<a href="{% url 'logout' %}">
+									logout
+								</a>
+
+							{% else %}
+								Login
+							{% endif %}
+						</a></li>
 					</ul>
 				</div>
 			</div>
