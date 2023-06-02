@@ -46,6 +46,9 @@ class RegisterView(TemplateView):
             login(request, user)
             return redirect('index')
 
+        context = {'user_form': user_form}
+        return render(request, 'templates/auth/register.html', context)
+
 
 def logout_user(request):
     logout(request)

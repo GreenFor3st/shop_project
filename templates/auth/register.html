@@ -100,9 +100,23 @@
 				<div class="row">
 					<form method="post" action="{% url 'register' %}">
 						{% csrf_token %}
-						{{ user_form }}
-						<div class="Submit">
-							<button type="submit" class="request-quote-btn">Submit</button>
+						{% for field in user_form %}
+						<div class="login">
+							{{ field.errors }}
+							{{ field.label_tag }}
+							{{ field }}
+						</div>
+						{% endfor %}
+<!--						<div class="email">-->
+<!--							<label class="form-label" for="id_username">Email</label>-->
+<!--							<input type="text" class="form-input" placeholder="Email" id="id_email" name="email" required>-->
+<!--						</div>-->
+<!--						<div class="passwprd">-->
+<!--							<label class="form-label" for="id_password">Password</label>-->
+<!--							<input type="password" class="form-input" placeholder="Password" id="id_password" name="password" required>-->
+<!--						</div>-->
+						<div class="Register">
+							<button type="submit" class="request-quote-btn">Register</button>
 						</div>
 					</form>
 				</div>
