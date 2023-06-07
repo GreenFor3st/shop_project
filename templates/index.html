@@ -48,13 +48,13 @@
 						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
 					</ul>
 					<ul class="header-links pull-right">
-						<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-						<li><a href="{% url 'register' %}"><i class="fa fa-user-o"></i>
-							{% if user.is_authenticated %}
-								{{ user.username }}
-							{% else %}
-								Register
-							{% endif %}
+                    <li><a href="{% if user.is_authenticated %}javascript:void(0);{% else %}{% url 'register' %}{% endif %}"
+                           class="{% if user.is_authenticated %}disabled-link{% endif %}"><i class="fa fa-user-o"></i>
+                        {% if user.is_authenticated %}
+                        {{ user.username }}
+                        {% else %}
+                            Register
+                        {% endif %}
 						</a></li>
 						<li><a href="{% url 'login' %}"><i class="fa fa-user-o"></i>
 							{% if user.is_authenticated %}

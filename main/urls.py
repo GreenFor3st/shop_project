@@ -20,11 +20,7 @@ from main import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('store/', views.store, name='store'),
-    path('blank/', views.blank, name='blank'),
-    path('product/', views.product, name='product'),
-    path('checkout/', views.checkout, name='checkout'),
     path('auth/', include('authentication.urls')),
-
+    path('store', include('shop.urls')),
     path('admin/', admin.site.urls),
 ]
