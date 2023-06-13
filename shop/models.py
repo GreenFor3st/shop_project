@@ -10,7 +10,17 @@ from django.db.models import Sum
 
 # Create your models here.
 class Product(models.Model):
+
+    CATEGORY_CHOICES = [
+        ('Keyboards', 'Keyboards'),
+        ('Mouses', 'Computer Mouses'),
+        ('Monitors', 'Monitors'),
+        ('Cameras', 'Cameras'),
+        ('Laptops', 'Laptops')
+    ]
+
     name = models.CharField(max_length=255, verbose_name='product_name')
+    category = models.CharField(max_length=255, choices=CATEGORY_CHOICES, verbose_name='Category')
     code = models.CharField(max_length=255, verbose_name='product_code')
     price = models.DecimalField(max_digits=20, decimal_places=2)
     unit = models.CharField(max_length=255, blank=True, null=True)
@@ -22,6 +32,9 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.price}'
+
+    def get_category_count(self):
+        return Product.objects.filter(category=self.category).count()
 
 
 class Payment(models.Model):
@@ -39,7 +52,7 @@ class Payment(models.Model):
     @staticmethod
     def get_balance(user: User):
         amount = Payment.objects.filter(user=user,
-                                      ).aggregate(Sum('amount'))['amount__sum']
+                                        ).aggregate(Sum('amount'))['amount__sum']
         return amount or Decimal(0)
 
 
