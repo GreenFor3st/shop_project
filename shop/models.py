@@ -33,9 +33,6 @@ class Product(models.Model):
     def __str__(self):
         return f'{self.name} - {self.price}'
 
-    def get_category_count(self):
-        return Product.objects.filter(category=self.category).count()
-
 
 class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -74,6 +71,15 @@ class Order(models.Model):
     payment = models.ForeignKey(Payment, on_delete=models.PROTECT, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
 
+    first_name = models.CharField(blank=True, max_length=100, default='', null=False)
+    last_name = models.CharField(blank=True, max_length=100, default='', null=False)
+    email = models.EmailField(blank=True, default='', null=False)
+    address = models.CharField(blank=True, max_length=255, default='', null=False)
+    city = models.CharField(blank=True, max_length=100, default='', null=False)
+    country = models.CharField(blank=True, max_length=100, default='', null=False)
+    zip_code = models.CharField(blank=True, max_length=20, default='', null=False)
+    tel = models.CharField(blank=True, max_length=20, default='', null=False)
+
     class Meta:
         ordering = ['pk']
 
@@ -99,11 +105,13 @@ class Order(models.Model):
         amount = Decimal(0)
         for item in self.orderitem_set.all():
             amount += item.amount
-            return amount
+        return amount
 
     def make_order(self):
         items = self.orderitem_set.all()
+
         if items and self.status == Order.STATUS_CART:
+
             self.status = Order.STATUS_WAITING_FOR_PAYMENT
             self.save()
             auto_payment_unpaid_orders(self.user)

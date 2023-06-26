@@ -880,6 +880,12 @@ textarea.input {
   right: 15px;
 }
 
+.product .product-img .product-label>p {
+  background-color: #FFF;
+  top: 15px;
+  right: 105px;
+}
+
 .product .product-img .product-label>span {
   border: 2px solid;
   padding: 2px 10px;
@@ -984,6 +990,14 @@ textarea.input {
   color: #D10024;
   border-radius: 50%;
 }
+
+
+.product .product-body .product-deteils>button:hover {
+  background-color: #E4E7ED;
+  color: #D10024;
+  border-radius: 50%;
+}
+
 
 .product .product-body .product-btns>button .tooltipp {
   position: absolute;
