@@ -1,0 +1,241 @@
+{% extends 'templates/basepage.html' %}
+{% load static %}
+{% block content %}
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="breadcrumb-header">Checkout</h3>
+                <ul class="breadcrumb-tree">
+                    <li><a href="#">Home</a></li>
+                    <li class="active">Checkout</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+
+            <div class="col-md-7">
+                <form method="post" action="{% url 'make_order' %}">
+                    {% csrf_token %}
+                    <!-- Billing Details -->
+                    <div class="billing-details">
+                        <div class="section-title">
+                            <h3 class="title">Billing address</h3>
+                        </div>
+
+
+                        <div class="form-group">
+                            <input class="input" type="text" name="first_name" placeholder="First Name" value="{{ form.first_name.value }}">
+                            {% if form.first_name.errors %}
+                                <span style="color:red;">{{ form.first_name.errors }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="text" name="last_name" placeholder="Last Name" value="{{ form.last_name.value }}">
+                            {% if form.last_name.errors %}
+                                <span style="color:red;">{{ form.last_name.errors }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="email" name="email" placeholder="Email" value="{{ form.email.value }}">
+                            {% if form.email.errors %}
+                                <span style="color:red;">{{ form.email.errors }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="text" name="address" placeholder="Address" value="{{ form.address.value }}">
+                            {% if form.address.errors %}
+                                <span style="color:red;">{{ form.address.errors }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="text" name="city" placeholder="City" value="{{ form.city.value }}">
+                            {% if form.city.errors %}
+                                <span style="color:red;">{{ form.city.errors }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="text" name="country" placeholder="Country" value="{{ form.country.value }}">
+                            {% if form.country.errors %}
+                                <span style="color:red;">{{ form.country.errors }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="text" name="zip_code" placeholder="ZIP Code" value="{{ form.zip_code.value }}">
+                            {% if form.zip_code.errors %}
+                                <span style="color:red;">{{ form.zip_code.errors }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <input class="input" type="tel" name="tel" placeholder="Telephone" value="{{ form.tel.value }}">
+                            {% if form.tel.errors %}
+                                <span style="color:red;">{{ form.tel.errors }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                    <!-- /Shiping Details -->
+
+                    <!-- Order notes -->
+                    <div class="order-notes">
+                        <textarea class="input" placeholder="Order Notes"></textarea>
+                    </div>
+                    <!-- /Order notes -->
+                    <button type="submit" class="primary-btn order-submit">Place order</button>
+                </form>
+            </div>
+
+
+            <!-- Order Details -->
+            <div class="col-md-5 order-details">
+                <div class="section-title text-center">
+                    <h3 class="title">Your Order</h3>
+                </div>
+                <div class="order-summary">
+                    <div class="order-col">
+                        <div><strong>PRODUCT</strong></div>
+                        <div><strong>TOTAL</strong></div>
+                    </div>
+                    <div class="order-products">
+                        {% for item in items %}
+                        <div class="order-col">
+                            <form method="post" action="{% url 'cart_delete_item' pk=item.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="delete"
+                                        style="top: 0;
+											left: 10;
+											height: 20px;
+											width: 20px;
+											text-align: center;
+											font-size: 12px;
+											padding: 0;
+											background: #FFF;
+											border: none;
+											color: #1e1f29;">
+                                    <i class="fa fa-close"></i></button>
+                            </form>
+                            <div>{{ item.quantity }}x {{ item.product }}</div>
+                            <div>${{ item.price }}</div>
+
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="order-col">
+                        <div>Shiping</div>
+                        <div><strong>FREE</strong></div>
+                    </div>
+                    <div class="order-col">
+                        <div><strong>TOTAL</strong></div>
+                        <div><strong class="order-total">${{ cart.amount }}</strong></div>
+                    </div>
+                </div>
+                <div class="payment-method">
+                    <div class="input-radio">
+                        <input type="radio" name="payment" id="payment-1">
+                        <label for="payment-1">
+                            <span></span>
+                            Direct Bank Transfer
+                        </label>
+                        <div class="caption">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua.</p>
+                        </div>
+                    </div>
+                    <div class="input-radio">
+                        <input type="radio" name="payment" id="payment-2">
+                        <label for="payment-2">
+                            <span></span>
+                            Cheque Payment
+                        </label>
+                        <div class="caption">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua.</p>
+                        </div>
+                    </div>
+                    <div class="input-radio">
+                        <input type="radio" name="payment" id="payment-3">
+                        <label for="payment-3">
+                            <span></span>
+                            Paypal System
+                        </label>
+                        <div class="caption">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-checkbox">
+                    <input type="checkbox" id="terms">
+                    <label for="terms">
+                        <span></span>
+                        I've read and accept the <a href="#">terms & conditions</a>
+                    </label>
+                </div>
+
+
+            </div>
+            <!-- /Order Details -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+
+
+<!-- /SECTION -->
+
+<!-- NEWSLETTER -->
+<div id="newsletter" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="newsletter">
+                    <p>Sign Up for the <strong>NEWSLETTER</strong></p>
+                    <form>
+                        <input class="input" type="email" placeholder="Enter Your Email">
+                        <button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+                    </form>
+                    <ul class="newsletter-follow">
+                        <li>
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /NEWSLETTER -->
+{% endblock %}

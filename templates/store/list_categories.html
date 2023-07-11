@@ -1,0 +1,14 @@
+{% load nav_tags %}
+{% if cat_selected == 0 %}
+<li class="input-checkbox">All</li>
+{% else %}
+<li><a href="{% url 'store' %}">All</a></li>
+{% endif %}
+{% for c in cats %}
+    {% if c.pk == cat_selected %}
+        <li class="input-checkbox">{{ c.name }}<small> ({{ c.product_count }})</small></li>
+
+    {% else %}
+        <li><a href="{% url 'category' cat_id=c.pk %}">{{ c.name }} <small> ({{ c.product_count }})</small></a></li>
+    {% endif %}
+{% endfor %}

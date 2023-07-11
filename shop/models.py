@@ -1,5 +1,6 @@
 from _decimal import Decimal
 
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.dispatch import receiver
@@ -10,28 +11,31 @@ from django.db.models import Sum
 
 # Create your models here.
 class Product(models.Model):
-
-    CATEGORY_CHOICES = [
-        ('Keyboards', 'Keyboards'),
-        ('Mouses', 'Computer Mouses'),
-        ('Monitors', 'Monitors'),
-        ('Cameras', 'Cameras'),
-        ('Laptops', 'Laptops')
-    ]
-
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, verbose_name='product_name')
-    category = models.CharField(max_length=255, choices=CATEGORY_CHOICES, verbose_name='Category')
+    cat = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Category')
     code = models.CharField(max_length=255, verbose_name='product_code')
     price = models.DecimalField(max_digits=20, decimal_places=2)
-    unit = models.CharField(max_length=255, blank=True, null=True)
+    unit = models.IntegerField(blank=True, null=True)
     image_url = models.URLField(blank=True, null=True)
     note = models.TextField(blank=True, null=True)
 
     class Meta:
-        ordering = ['pk']
+        ordering = ['id']
 
     def __str__(self):
         return f'{self.name} - {self.price}'
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, db_index=True, verbose_name="Category")
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'cat': self.pk})
 
 
 class Payment(models.Model):
@@ -64,7 +68,6 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # items = models.ManyToManyField(OrderItem, related_name='orders')
     status = models.CharField(max_length=32, choices=STATUS_CHOICES, default=STATUS_CART)
     amount = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     creation_time = models.DateTimeField(auto_now_add=True)
@@ -111,7 +114,6 @@ class Order(models.Model):
         items = self.orderitem_set.all()
 
         if items and self.status == Order.STATUS_CART:
-
             self.status = Order.STATUS_WAITING_FOR_PAYMENT
             self.save()
             auto_payment_unpaid_orders(self.user)
@@ -139,7 +141,8 @@ class OrderItem(models.Model):
 
     @property
     def amount(self):
-        return self.quantity*(self.price-self.discount)
+        return self.quantity * (self.price - self.discount)
+
 
 @transaction.atomic()
 def auto_payment_unpaid_orders(user: User):
@@ -167,6 +170,7 @@ def recalculate_order_amount_after_delete(sender, instance, **kwargs):
     order = instance.order
     order.amount = order.get_amount()
     order.save()
+
 
 @receiver(post_save, sender=Payment)
 def auto_payment(sender, instance, **kwargs):

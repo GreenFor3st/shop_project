@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-!sk-$#5f*elx(!he1#wy2-6a*_483dmeq@a(x^t^evja4^cl9#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 
@@ -39,11 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    #----------my_aps------------
+    #----------my_apps------------
     'authentication',
     'shop',
     'static',
-
 ]
 
 MIDDLEWARE = [
@@ -73,6 +72,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'nav_tags': 'shop.template_tags.nav_tags',
+                'info_tags': 'shop.template_tags.info_tags',
+
+            }
         },
     },
 ]

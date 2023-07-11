@@ -216,7 +216,6 @@ class TestDataBase(TestCase):
         amount = Order.get_amount_of_unpaid_orders(self.user)
         self.assertEqual(amount, Decimal(0))
 
-
     def test_auto_payment_for_earlier_order(self):
         """There is unpaid order=29.99 and balance=100
         After creating new order=1000 applying payment=1000:

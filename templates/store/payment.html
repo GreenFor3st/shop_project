@@ -1,0 +1,17 @@
+{% extends 'templates/basepage.html' %}
+{% load static %}
+{% load info_tags %}
+{% block content %}
+<h3>Your current balance: {% balance_context request %} USD</h3>
+<form method="post" action="{% url 'make_payment' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <input class="input" type="text" name="amount" placeholder="Amount">
+        {% if form.amount.errors %}
+        <span style="color:red;">{{ form.amount.errors }}</span>
+        {% endif %}
+        <button type="submit">Top up</button>
+    </div>
+</form>
+
+{% endblock %}

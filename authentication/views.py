@@ -1,8 +1,11 @@
 from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+from django.views import View
 
-from authentication.forms import LoginForm, RegisterForm
+from authentication.forms import LoginForm, RegisterForm, ProfileForm, ChangePasswordForm
 
 
 # Create your views here.
@@ -50,6 +53,48 @@ class RegisterView(TemplateView):
         return render(request, 'templates/auth/register.html', context)
 
 
+class EditProfileView(LoginRequiredMixin, View):
+    template_name = 'templates/auth/profile.html'
+    login_url = 'login'
+
+    def get(self, request):
+        user = request.user
+        if user.is_authenticated:
+            user_form = ProfileForm(instance=user)
+        else:
+            user_form = ProfileForm()
+        context = {'user_form': user_form}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        user = request.user
+        if user.is_authenticated:
+            user_form = ProfileForm(request.POST, instance=user)
+        else:
+            user_form = ProfileForm(request.POST)
+        if user_form.is_valid():
+            user_form.save()
+            return redirect('login')
+        context = {'user_form': user_form}
+        return render(request, self.template_name, context)
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        form.set_request(request)
+        if form.is_valid():
+            form.save(request.user)
+            return redirect('edit_profile')
+    else:
+        form = ChangePasswordForm()
+
+    context = {'form': form}
+    return render(request, 'templates/auth/change_password.html', context)
+
+
 def logout_user(request):
     logout(request)
     return redirect('index')
+
+

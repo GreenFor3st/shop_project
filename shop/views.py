@@ -1,31 +1,35 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Count
 
-from django.views.generic import ListView, DetailView, DeleteView, TemplateView
+from django.views.generic import ListView, DetailView, DeleteView
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 from django.urls import reverse_lazy
 
-from shop.forms import AddQuantityForm, BillingForm
-from shop.models import Product, Order, OrderItem
+from shop.forms import AddQuantityForm, BillingForm, PaymentForm
+from shop.models import Product, Order, OrderItem, Category, Payment
 
 
 class ProductsListView(ListView):
     model = Product
-    template_name = 'templates/store.html'
+    template_name = 'templates/store/store.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        categories = list(set(Product.objects.values_list('category').annotate(category_count=Count('category'))))
-        context['categories'] = categories
+        context['cat_selected'] = 0
         return context
+
+
+def show_category(request, cat_id):
+    cat_selected = Category.objects.filter(pk=cat_id)
+    products = Product.objects.filter(cat__in=cat_selected)
+    return render(request, 'templates/store/store.html', {'object_list': products, 'cat_selected': cat_id})
 
 
 class ProductsDetailView(DetailView):
     model = Product
-    template_name = 'templates/product.html'
+    template_name = 'templates/store/product.html'
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -36,7 +40,6 @@ def add_item_to_cart(request, pk):
             quantity = quantity_form.cleaned_data['quantity']
             if quantity:
                 cart = Order.get_cart(request.user)
-                # product = Product.objects.get(pk=pk)
                 product = get_object_or_404(Product, pk=pk)
                 cart.orderitem_set.create(product=product,
                                           quantity=quantity,
@@ -50,7 +53,7 @@ def add_item_to_cart(request, pk):
 
 class CartView(ListView):
     model = Order
-    template_name = 'templates/cart.html'
+    template_name = 'templates/store/cart.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,10 +67,28 @@ class CartView(ListView):
         return context
 
 
+class PaymentView(ListView):
+    model = Payment
+    template_name = 'templates/store/payment.html'
+
+
+@login_required(login_url=reverse_lazy('login'))
+def make_payment(request):
+    if request.method == "POST":
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            Payment.objects.create(user=request.user, amount=amount)
+            return redirect('store')
+
+    context = {'form': form}
+    return render(request, 'templates/store/payment.html', context)
+
+
 @method_decorator(login_required, name='dispatch')
 class CartDeleteItem(DeleteView):
     model = OrderItem
-    template_name = 'shop/cart.html'
+    template_name = 'templates/store/cart.html'
     success_url = reverse_lazy('cart_view')
 
     def get_queryset(self):
@@ -78,16 +99,16 @@ class CartDeleteItem(DeleteView):
 
 @login_required(login_url=reverse_lazy('login'))
 def make_order(request):
+    cart = Order.get_cart(request.user)
+    items = cart.orderitem_set.all()
     if request.method == "POST":
         cart = Order.get_cart(request.user)
         form = BillingForm(request.POST, instance=cart)
         if form.is_valid():
-
             form.save()
             cart.make_order()
             return redirect('store')
-    else:
-        cart = Order.get_cart(request.user)
-        form = BillingForm(instance=cart)
 
-    return render(request, 'templates/cart.html', {'form': form})
+    context = {'form': form, 'cart': cart, 'items': items}
+
+    return render(request, 'templates/store/cart.html', context)
