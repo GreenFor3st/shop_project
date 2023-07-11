@@ -1,0 +1,39 @@
+{% load nav_tags %}
+{% load static %}
+
+
+<div class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+        <i class="fa fa-shopping-cart"></i>
+        <span>Your Cart</span>
+        <div class="qty">{{ items|length }}</div>
+    </a>
+    <div class="cart-dropdown">
+        <div class="cart-list">
+            {% for item in items %}
+            <div class="product-widget">
+                <div class="product-img">
+                    <img src="{{ item.product.image_url }}" alt="">
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name"><a href="#">{{ item.product }}</a></h3>
+                    <h4 class="product-price"><span class="qty">{{ item.quantity }}x</span>${{ item.price }}</h4>
+                </div>
+                <form method="post" action="{% url 'cart_delete_item' pk=item.pk %}">
+                    {% csrf_token %}
+                    <button class="delete"><i class="fa fa-close"></i></button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="cart-summary">
+            {% with product_count=items|length %}
+            <small>{{ product_count }} Item{% if product_count != 1 %}s{% endif %} selected</small>
+            {% endwith %}
+            <h5>SUBTOTAL: ${{ cart.amount }}</h5>
+        </div>
+        <div class="cart-btns">
+            <a href="{% url 'cart_view' %}">View Cart</a>
+        </div>
+    </div>
+</div>

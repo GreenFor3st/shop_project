@@ -1,9 +1,11 @@
-from shop.models import Payment
+from shop.forms import BillingForm
+from shop.models import Payment, Order
 from django import template
 
 register = template.Library()
 
 
+########## Balance ###########
 @register.simple_tag
 def balance_context(request):
     if request.user.is_authenticated:

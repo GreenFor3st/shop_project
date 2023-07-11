@@ -107,52 +107,9 @@
 
                         <!-- Cart -->
                         {% if request.path != '/store/cart_view/' and request.path != '/storemake-order/' %}
-
-
-                            <div class="dropdown">
-                                <a class="dropdown-toggle"  href="{% url 'cart_view' %}">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    <span>Your Cart</span>
-                                    {% with product_count=basepage %}
-                                        <div class="qty">{{ product_count }}</div>
-                                    {% endwith %}
-                                </a>
-<!--                                <div class="cart-dropdown">-->
-<!--                                    <div class="cart-list">-->
-
-<!--                                        {% for item in items %}-->
-<!--                                            <div class="product-widget">-->
-<!--&lt;!&ndash;                                                {% csrf_token %}&ndash;&gt;-->
-<!--                                                &lt;!&ndash;													<div class="product-img">&ndash;&gt;-->
-<!--                                                &lt;!&ndash;														<img src="{{item.image_url}}" alt="">&ndash;&gt;-->
-<!--                                                &lt;!&ndash;													</div>&ndash;&gt;-->
-<!--                                                <div class="product-body">-->
-<!--                                                    <h3 class="product-name"><a href="{% url 'product' item.pk %}">{{ item.name }}</a></h3>-->
-<!--                                                    <h4 class="product-price"><span class="qty">{{ item.quantity }}x</span>${{ item.price }}-->
-<!--                                                    </h4>-->
-<!--                                                </div>-->
-<!--                                                <form method="post" action="{% url 'cart_delete_item' item.pk %}">-->
-<!--                                                    {% csrf_token %}-->
-<!--                                                    <button class="delete" type="submit"><i class="fa fa-close"></i></button>-->
-<!--                                                </form>-->
-
-<!--                                            </div>-->
-<!--                                        {% endfor %}-->
-<!--                                    </div>-->
-<!--                                    {% with product_count=cart.orderitem_set.count %}-->
-<!--                                    <div class="cart-summary">-->
-<!--                                        <small>{{ product_count }} Item{% if product_count != 1 %}s{% endif %}-->
-<!--                                            selected</small>-->
-<!--                                        <h5>SUBTOTAL: ${{ cart.amount }}</h5>-->
-<!--                                    </div>-->
-<!--                                {% endwith %}-->
-<!--                                <div class="cart-btns">-->
-<!--                                    <a href="{% url 'cart_view' %}">View Cart</a>-->
-<!--                                    {% endif %}-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-                        <!-- /Cart -->
+                        {% cart_context request %}
+                        {% endif %}
+<!--                         /Cart -->
 
                         <!-- Menu Toogle -->
                         <div class="menu-toggle">

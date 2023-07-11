@@ -89,7 +89,10 @@ def make_payment(request):
 class CartDeleteItem(DeleteView):
     model = OrderItem
     template_name = 'templates/store/cart.html'
-    success_url = reverse_lazy('cart_view')
+    # success_url = reverse_lazy('cart_view')
+
+    def get_success_url(self):
+        return self.request.META['HTTP_REFERER']
 
     def get_queryset(self):
         qs = super().get_queryset()

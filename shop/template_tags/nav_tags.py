@@ -1,5 +1,7 @@
 from django import template
-from shop.models import Product, Category, Payment
+
+from shop.forms import BillingForm
+from shop.models import Product, Category, Payment, Order
 from django.db.models import Count
 
 register = template.Library()
@@ -22,3 +24,16 @@ def show_categories(sort=None, cat_selected=0):
 
     return {"cats": categories, "cat_selected": cat_selected}
 
+
+########## Cart wiget ###########
+@register.inclusion_tag('templates/cart_widget.html')
+def cart_context(request):
+    cart = Order.get_cart(request.user)
+    items = cart.orderitem_set.all()
+    form = BillingForm(instance=cart)
+    context = {
+        'cart': cart,
+        'items': items,
+        'form': form,
+    }
+    return context
