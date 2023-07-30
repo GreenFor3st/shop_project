@@ -1,8 +1,12 @@
 from django import template
 
 from shop.forms import BillingForm
-from shop.models import Product, Category, Payment, Order
+from shop.models import Product, Category, Order
 from django.db.models import Count
+from django.urls import reverse_lazy
+
+from django.contrib.auth.decorators import login_required
+
 
 register = template.Library()
 
@@ -27,6 +31,7 @@ def show_categories(sort=None, cat_selected=0):
 
 ########## Cart wiget ###########
 @register.inclusion_tag('templates/cart_widget.html')
+@login_required(login_url=reverse_lazy('login'))
 def cart_context(request):
     cart = Order.get_cart(request.user)
     items = cart.orderitem_set.all()

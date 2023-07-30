@@ -6,7 +6,7 @@
 <form method="post" action="{% url 'make_payment' %}">
     {% csrf_token %}
     <div class="form-group">
-        <input class="input" type="text" name="amount" placeholder="Amount">
+        <input class="input" type="number" name="amount" placeholder="Amount">
         {% if form.amount.errors %}
         <span style="color:red;">{{ form.amount.errors }}</span>
         {% endif %}

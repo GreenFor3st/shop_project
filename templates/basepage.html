@@ -107,7 +107,9 @@
 
                         <!-- Cart -->
                         {% if request.path != '/store/cart_view/' and request.path != '/storemake-order/' %}
-                        {% cart_context request %}
+                            {% if user.is_authenticated %}
+                                {% cart_context request %}
+                            {% endif %}
                         {% endif %}
 <!--                         /Cart -->
 
@@ -141,9 +143,9 @@
                 <li class="active"><a href="{% url 'store' %}">Store</a></li>
                 {% if request.path != '/store' and request.path != '/category/' %}
                     <li><a href="{% url 'category' cat_id=3 %}">Laptops</a></li>
-                    <li><a href="#">Smartphones</a></li>
-                    <li><a href="#">Cameras</a></li>
-                    <li><a href="#">Accessories</a></li>
+                    <li><a href="{% url 'category' cat_id=5 %}">Smartphones</a></li>
+                    <li><a href="{% url 'category' cat_id=4 %}">Cameras</a></li>
+                    <li><a href="{% url 'category' cat_id=6 %}">Accessories</a></li>
                 {% endif %}
             </ul>
             <!-- /NAV -->

@@ -1,9 +1,13 @@
 from django.shortcuts import render
+from django.views.generic import ListView
+
+from shop.models import Product
 
 
 # Create your views here.
-def index(request):
-    return render(request, 'templates/index.html')
+class IndexView(ListView):
+    model = Product
+    template_name = 'templates/index.html'
 
 
 def store(request):

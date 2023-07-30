@@ -1,6 +1,6 @@
 {% extends 'templates/basepage.html' %}
 {% load static %}
-
+{% load nav_tags %}
 {% block content %}
 
 		<!-- SECTION -->
@@ -105,7 +105,7 @@
 												</div>
 												<div class="product-body">
 													<p class="product-category">{{ product.cat }}</p>
-													<h3 class="product-name"><a href="#">{{ product.name }}</a></h3>
+													<h3 class="product-name"><a href="{% url 'product' product.pk %}">{{ product.name }}</a></h3>
 													<h4 class="product-price">${{ product.price }}</h4>
 													<div class="product-rating">
 														<i class="fa fa-star"></i>
@@ -115,7 +115,6 @@
 														<i class="fa fa-star"></i>
 													</div>
 													<div class="product-btns">
-														<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
 														<button class="quick-view"><i class="fa fa-eye"></i>
 															<a class="tooltipp" href="{% url 'product' product.pk %}">quick view</a>
 															</button>

@@ -2,7 +2,7 @@ from _decimal import Decimal
 
 from django import forms
 
-from shop.models import OrderItem, Order, Product, Payment
+from shop.models import OrderItem, Order, Payment
 
 
 class AddQuantityForm(forms.ModelForm):
@@ -48,13 +48,8 @@ class PaymentForm(forms.ModelForm):
         try:
             decimal_amount = Decimal(amount)
         except (ValueError, TypeError) as e:
-            print(e)
             raise forms.ValidationError("Value must be a decimal number.")
         if decimal_amount < 10:
             raise forms.ValidationError("The amount must be greater than 10$.")
-        if decimal_amount is not int:
-            raise forms.ValidationError("Only integer numbers.")
 
         return decimal_amount
-
-

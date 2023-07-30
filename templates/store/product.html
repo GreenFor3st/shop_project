@@ -16,29 +16,7 @@
 							</div>
 						</div>
 					</div>
-					<!-- /Product main img -->
 
-<!--					&lt;!&ndash; Product thumb imgs &ndash;&gt;-->
-<!--					<div class="col-md-2  col-md-pull-5">-->
-<!--						<div id="product-imgs">-->
-<!--							<div class="product-preview">-->
-<!--								<img src="./img/product01.png" alt="">-->
-<!--							</div>-->
-
-<!--							<div class="product-preview">-->
-<!--								<img src="./img/product03.png" alt="">-->
-<!--							</div>-->
-
-<!--							<div class="product-preview">-->
-<!--								<img src="./img/product06.png" alt="">-->
-<!--							</div>-->
-
-<!--							<div class="product-preview">-->
-<!--								<img src="./img/product08.png" alt="">-->
-<!--							</div>-->
-<!--						</div>-->
-<!--					</div>-->
-					<!-- /Product thumb imgs -->
 
 					<!-- Product details -->
 					<div class="col-md-5">
@@ -60,20 +38,7 @@
 							</div>
 							<p>{{product.note}}</p>
 
-<!--							<div class="product-options">-->
-<!--								<label>-->
-<!--									Size-->
-<!--									<select class="input-select">-->
-<!--										<option value="0">X</option>-->
-<!--									</select>-->
-<!--								</label>-->
-<!--								<label>-->
-<!--									Color-->
-<!--									<select class="input-select">-->
-<!--										<option value="0">Red</option>-->
-<!--									</select>-->
-<!--								</label>-->
-<!--							</div>-->
+
 
 							<div class="add-to-cart">
 								<form method="post" action="{% url 'add_item_to_cart' product.pk %}">
@@ -90,13 +55,10 @@
 								</form>
 							</div>
 
-							<ul class="product-btns">
-								<li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-							</ul>
 
 							<ul class="product-links">
 								<li>Category:</li>
-								<li><a href="#">{{product.category}}</a></li>
+								<li><a href="#">{{product.cat}}</a></li>
 							</ul>
 
 							<ul class="product-links">

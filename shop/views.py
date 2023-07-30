@@ -76,8 +76,10 @@ class PaymentView(ListView):
 def make_payment(request):
     if request.method == "POST":
         form = PaymentForm(request.POST)
+        print(form)
         if form.is_valid():
             amount = form.cleaned_data['amount']
+            print(amount)
             Payment.objects.create(user=request.user, amount=amount)
             return redirect('store')
 
@@ -89,7 +91,6 @@ def make_payment(request):
 class CartDeleteItem(DeleteView):
     model = OrderItem
     template_name = 'templates/store/cart.html'
-    # success_url = reverse_lazy('cart_view')
 
     def get_success_url(self):
         return self.request.META['HTTP_REFERER']
