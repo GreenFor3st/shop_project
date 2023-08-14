@@ -52,10 +52,10 @@
             </ul>
             <ul class="header-links pull-right">
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'payment' %}"><i class="fa fa-dollar"></i>{% balance_context request %} USD</a></li>
-                    <li><a href="{% url 'edit_profile' %}"><i class="fa fa-user-o"></i> {{ user.username }}</a></li>
+                <li><a href="{% url 'payment' %}"><i class="fa fa-dollar"></i>{% balance_context request %} USD</a></li>
+                <li><a href="{% url 'edit_profile' %}"><i class="fa fa-user-o"></i> {{ user.username }}</a></li>
                 {% else %}
-                    <li><a href="{% url 'register' %}"><i class="fa fa-user-o"></i>Register</a></li>
+                <li><a href="{% url 'register' %}"><i class="fa fa-user-o"></i>Register</a></li>
                 {% endif %}
                 <li><a href="{% url 'login' %}"><i class="fa fa-user-o"></i>
                     {% if user.is_authenticated %}
@@ -90,10 +90,12 @@
                 <!-- SEARCH BAR -->
                 <div class="col-md-6">
                     <div class="header-search">
-                        <form>
-                            <input class="input" placeholder="Search here">
-                            <button class="search-btn">Search</button>
+
+                        <form id="search-form" action="{% url 'product_search' %}">
+                            <input type="text" name="search_query">
+                            <button type="submit">Search</button>
                         </form>
+                        <div id="search-results"></div>
                     </div>
                 </div>
                 <!-- /SEARCH BAR -->
@@ -107,11 +109,11 @@
 
                         <!-- Cart -->
                         {% if request.path != '/store/cart_view/' and request.path != '/storemake-order/' %}
-                            {% if user.is_authenticated %}
-                                {% cart_context request %}
-                            {% endif %}
+                        {% if user.is_authenticated %}
+                        {% cart_context request %}
                         {% endif %}
-<!--                         /Cart -->
+                        {% endif %}
+                        <!--                         /Cart -->
 
                         <!-- Menu Toogle -->
                         <div class="menu-toggle">
@@ -142,10 +144,10 @@
             <ul class="main-nav nav navbar-nav">
                 <li class="active"><a href="{% url 'store' %}">Store</a></li>
                 {% if request.path != '/store' and request.path != '/category/' %}
-                    <li><a href="{% url 'category' cat_id=3 %}">Laptops</a></li>
-                    <li><a href="{% url 'category' cat_id=5 %}">Smartphones</a></li>
-                    <li><a href="{% url 'category' cat_id=4 %}">Cameras</a></li>
-                    <li><a href="{% url 'category' cat_id=6 %}">Accessories</a></li>
+                <li><a href="{% url 'category' cat_id=3 %}">Laptops</a></li>
+                <li><a href="{% url 'category' cat_id=5 %}">Smartphones</a></li>
+                <li><a href="{% url 'category' cat_id=4 %}">Cameras</a></li>
+                <li><a href="{% url 'category' cat_id=6 %}">Accessories</a></li>
                 {% endif %}
             </ul>
             <!-- /NAV -->

@@ -21,6 +21,15 @@ class ProductsListView(ListView):
         return context
 
 
+def show_search_query(request):
+    search_query = request.GET.get('search_query', '')
+    if search_query:
+        products = Product.objects.filter(name__icontains=search_query)
+    else:
+        products = Product.objects.all()
+    return render(request, 'templates/store/store.html', {'object_list': products})
+
+
 def show_category(request, cat_id):
     cat_selected = Category.objects.filter(pk=cat_id)
     products = Product.objects.filter(cat__in=cat_selected)
@@ -76,10 +85,8 @@ class PaymentView(ListView):
 def make_payment(request):
     if request.method == "POST":
         form = PaymentForm(request.POST)
-        print(form)
         if form.is_valid():
             amount = form.cleaned_data['amount']
-            print(amount)
             Payment.objects.create(user=request.user, amount=amount)
             return redirect('store')
 
